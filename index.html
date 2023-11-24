@@ -12,9 +12,17 @@
             }
 
             html {
-                background-color: #333;
                 font-family: basic, sans-serif;
-                background: linear-gradient(#000, #040);
+                background: linear-gradient(#000, #020, #030);
+            }
+
+            canvas {
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: -1;
             }
 
             body {
@@ -22,7 +30,8 @@
                 height: 100%;
                 width: 70%;
                 margin: auto;
-                padding: 5em;
+                padding-bottom: 5em;
+                font-size: 20px
             }
 
             .whole {
@@ -63,7 +72,7 @@
                 box-shadow: 0 0 3em #000;
             }
 
-            h1, h2 {
+            h1, h3 {
                 text-align: center;
             }
 
@@ -72,14 +81,28 @@
                 margin-bottom: 1em;
                 font-weight: bold;
             }
+
+            select {
+                background-color: #eee;
+                border: none;
+                border-radius: 1em;
+                padding: .5em;
+                color: #000;
+            }
+
+            h4 {
+                font-size: 3em;
+                text-align: center;
+                text-shadow: 0 0 10px #0005;
+            }
         </style>
     </head>
 
     <body>
-        <div class = whole><b>
-            <h1>~ Revised & Updated ~</h1>
-            <h2>The Converter</h2>
+        <h1>~ The Converter ~</h1>
+        <h3>Revised & Updated</h3>
 
+        <div class = whole><b>
             Input: <input id = source oninput = input()><br>
             X Shift: <input id = xshift oninput = input() type = number><br>
             Y Shift: <input id = yshift oninput = input() type = number><br>
@@ -94,19 +117,20 @@
         <p></p>
         Hello there!
         In case you need help in understanding the tool, I have written a small tutorial
-        to explain what each box does:
+        to explain what each box does.
         <p></p>
-        <h3><b>Input</b></h3> Put your FRHD export save code in the input box. Once you do this, the
+        <br>
+        <h3><b>~ Input ~</b></h3> Put your FRHD export code in the input box. Once you do this, the
         <b>Output</b> will also return some text. The <b>output</b> box is the modified result.
         At the moment, however, the result will be <b>exactly the same</b>.
         <img src = comp1.png>
         <p></p>
-        <h3><b>Shift</b></h3> This box tells the tool <b>how far down</b> the track should be
+        <h3><b>~ Shift ~</b></h3> This box tells the tool <b>how far down</b> the track should be
         duplicated. For example, in my track <i>Fantasy Teleports</i>, I set it to <b>10000</b>.
         This meant each duplication was 10000 pixels from the other.
         <img src = comp2.png>
         <p></p>
-        <h3><b>Threshold</b></h3> This box is going to be the hardest to explain, but I'll try my best.
+        <h3><b>~ Threshold ~</b></h3> This box is going to be the hardest to explain, but I'll try my best.
         Imagine this: We make a track. We duplicate this track using the tool. The new track is modified (or changed)
         a little. Now we need to duplicate this new track - but not the original one. The picture may help if you don't understand.
         <img src = comp3.png>
@@ -115,6 +139,8 @@
         <img src = comp4.png>
         Anyway, thank you for reading to the end, remember it can't duplicate power-ups or upgrades at the moment,
         and I hope it will come in handy for your future projects!
+
+        <h4>Hope41</h4>
 
         <script>
             function copyCode() {
@@ -152,6 +178,34 @@
                 array.push(...total.slice(2))
                 output.value = array.join("#")
             }
+        </script>
+
+        <canvas id = bg></canvas>
+        <script>
+            function update() {
+                time += .05
+                bg.width = innerWidth
+                bg.height = innerHeight
+
+                const max = 20
+                for (let i = 0; i < max; i ++) {
+                    const s = Math.sin(i * i) * 10
+                    const speed = Math.sin((i ** 3) + time) * 20
+                    const y = bg.height - s - ((time * 50 + speed + i ** 4) % bg.height)
+                    const a = y / bg.height
+
+                    ctx.fillStyle = 'rgb(255, 255, 0,'+a+')'
+                    ctx.fillRect(
+                        Math.sin(time + i) * 20 + i * bg.width / max,
+                        y, s, s)
+                }
+
+                requestAnimationFrame(update)
+            }
+
+            let time = 0
+            const ctx = bg.getContext('2d')
+            update()
         </script>
     </body>
 </html>
